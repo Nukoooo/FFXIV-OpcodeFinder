@@ -25,3 +25,6 @@ This program aims to help finding network opcodes for Final Fantasy XIV.
     ]
 }
 ```
+# Credits
+- [XutaxKamay](https://github.com/XutaxKamay/) for helping me understand how indirect jumptable works
+- [PostNamazu](https://github.com/Natsukage/PostNamazu) for SigScanning thingy
