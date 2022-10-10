@@ -333,15 +333,20 @@ internal class OpcodeFinder
                         var xrefResults = new List<TableInfo>();
                         var xrefs = _scanner.GetCrossReference((int)functionStart);
                         foreach (var i in offsetList)
-                        foreach (var xref in xrefs)
-                            for (var offset = 0; offset <= 0x50; offset++)
-                            {
-                                var curAddress = xref - (ulong)offset + (ulong)i;
-                                var info = tableInfos.Find(i => i.Location == curAddress);
-                                if (info.Index == 0)
-                                    continue;
+                        {
+                            foreach (var xref in xrefs)
+                                for (var offset = 0; offset <= 0x50; offset++)
+                                {
+                                    var curAddress = xref - (ulong)offset + (ulong)i;
+                                    var info = tableInfos.Find(i => i.Location == curAddress);
+                                    if (info.Index == 0)
+                                        continue;
 
-                                xrefResults.Add(info);
+                                    xrefResults.Add(info);
+                                    break;
+                                }
+
+                            if (xrefResults.Count != 0)
                                 break;
                             }
 
