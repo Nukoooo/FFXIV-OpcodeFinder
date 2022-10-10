@@ -348,7 +348,7 @@ internal class OpcodeFinder
 
                             if (xrefResults.Count != 0)
                                 break;
-                            }
+                        }
 
                         if (xrefResults.Count == 0)
                         {
