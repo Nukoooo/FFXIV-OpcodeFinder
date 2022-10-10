@@ -1,0 +1,383 @@
+{
+  "GamePath": "C:/最终幻想XIV/game/ffxiv_dx11.exe",
+  "Signatures": [
+    {
+      "Signature": "C7 44 24 ? ? ? ? ? 45 33 C0 48 C7 44 24 ? ? ? ? ? 40 88 74 24",
+      "Name": "C2S_ActionRequest",
+      "Offset": 4,
+      "ReadType": 2
+    },
+    {
+      "Signature": "C7 44 24 ? ? ? ? ? 48 C7 44 24 ? ? ? ? ? 40 88 6C 24",
+      "Name": "C2S_ActionRequestGroundTargeted",
+      "Offset": 4,
+      "ReadType": 2
+    },
+    {
+      "Signature": "C7 44 24 ? ? ? ? ? 48 C7 44 24 ? ? ? ? ? 89 6C 24 40 89 74 24 44 89 7C 24 48 89 5C 24 4C",
+      "Name": "ClientTrigger",
+      "Offset": 4,
+      "ReadType": 2
+    },
+    {
+      "Signature": "C7 44 24 ? ? ? ? ? 44 8B CE 0F 11 44 24",
+      "Name": "UpdatePositionInstance",
+      "Offset": 4,
+      "ReadType": 2
+    },
+    {
+      "Signature": "C7 44 24 ? ? ? ? ? F7 D9",
+      "Name": "UpdatePositionHandler",
+      "Offset": 4,
+      "ReadType": 2
+    },
+    {
+      "Signature": "C7 44 24 ? ? ? ? ? 48 C7 44 24 ? ? ? ? ? E8 ? ? ? ? 84 C0 74 04 B0 01 EB 02 32 C0 48 8B 8C 24 ? ? ? ? 48 33 CC E8 ? ? ? ? 48 81 C4 ? ? ? ? 5B C3 CC CC CC CC CC CC CC CC CC CC CC CC",
+      "Name": "MarketBoardPurchaseHandler",
+      "Offset": 4,
+      "ReadType": 2
+    },
+    {
+      "Signature": "C7 44 24 ? ? ? ? ? 48 C7 44 24 ? ? ? ? ? 48 C7 44 24 ? ? ? ? ? 89 6C 24 4C 66 89 74 24 ? 89 44 24 54",
+      "Name": "InventoryModifyHandler",
+      "Offset": 4,
+      "ReadType": 2
+    },
+    {
+      "Signature": "41 B8 ? ? ? ? 48 C7 44 24 ? ? ? ? ? 4C 8B CB 8B D6 48 8B CF E8 ? ? ? ? 48 8B 5C 24 ? 48 8B 74 24 ? 48 83 C4 30 5F C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 30 48 8B D9",
+      "Name": "ActorControlTarget",
+      "Offset": 2,
+      "ReadType": 2
+    },
+    {
+      "Signature": "41 B8 ? ? ? ? 48 C7 44 24 ? ? ? ? ? 4C 8B CB 8B D6 48 8B CF E8 ? ? ? ? 48 8B 5C 24 ? 48 8B 74 24 ? 48 83 C4 30 5F C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 30 8B F2",
+      "Name": "ActorControl",
+      "Offset": 2,
+      "ReadType": 2
+    },
+    {
+      "Signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 50 48 8B FA 48 8B F1 0F B7 12",
+      "Name": "ProcessActorControl",
+      "FunctionSize": 4704,
+      "JumpTableType": 2,
+      "SubInfo": [
+        {
+          "Signature": "40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 48 8B C8 48 8B D3 48 83 C4 20 5B E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 48 8B C8 E8 ? ? ? ? 48 85 C0 74 10",
+          "Name": "EnvironmentControl",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 55 56",
+          "Name": "PlaceFieldMarker",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B DA 8B F9 0F B6 52 ?",
+          "Name": "PlayerSpawn",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 8B C4 44 88 40 18 89 48 08",
+          "Name": "EffectResult",
+          "ActionType": 2
+        },
+        {
+          "Signature": "0F B7 13 B8 ? ? ? ?",
+          "Name": "ActorControlSelf",
+          "ActionType": 0
+        },
+        {
+          "Signature": "48 89 5C 24 ? 57 48 83 EC 60 48 8B 05 ? ? ? ? 48 33 C4 48 89 44 24 ? 48 8B DA",
+          "Name": "AoeEffect01",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 8D 93 ?? ?? ?? ?? 48 8D 4C 24 ?? E8 ?? ?? ?? ?? 8B 15 ?? ?? ?? ??",
+          "Name": "AoeEffect",
+          "Offset": 3,
+          "ReadType": 2,
+          "ActionType": 1,
+          "DesiredValues": {
+            "624": "8",
+            "1200": "16",
+            "1776": "24",
+            "2352": "32"
+          }
+        },
+        {
+          "Signature": "40 55 56 48 81 EC ? ? ? ? 48 8B EA",
+          "Name": "ActorCast",
+          "ActionType": 2
+        },
+        {
+          "Signature": "4C 8B 01 4D 85 C0 74 12 0F B6 02",
+          "Name": "ActorGauge",
+          "ActionType": 2
+        },
+        {
+          "Signature": "4C 8B C2 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 4C 8B C2 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 53",
+          "Name": "ActorSetPos",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 48 83 EC 20 83 3D ? ? ? ? ? 41 0F B6 E8 48 8B DA 8B F1 0F 84 ? ? ? ? 48 89 7C 24",
+          "Name": "UpdateHpMpTp",
+          "ActionType": 2
+        },
+        {
+          "Signature": "4C 8B 4B 10 49 8B C1",
+          "Name": "EventPlay"
+        }
+      ]
+    },
+    {
+      // 48 89 5C 24 ?? 56 48 83 EC 50 8B F2 global 6.21
+
+      "Signature": "40 55 56 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 45 37 8B FA",
+      "Name": "ProcessZonePacketDown",
+      "Offset": 0,
+      "FunctionSize": 400,
+      "ReadType": 0,
+      "ActionType": 0,
+      "JumpTableType": 1,
+      "SubInfo": [
+        {
+          "Signature": "48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 55",
+          "Name": "MarketBoardSearchResult",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 89 5C 24 ? 57 48 83 EC 40 48 8B 0D ? ? ? ? 48 8B DA E8 ? ? ? ? 48 8B F8",
+          "Name": "MarketBoardItemListingCount",
+          "ActionType": 2
+        },
+        {
+          "Signature": "40 53 48 83 EC 20 48 8B 0D ? ? ? ? 48 8B DA E8 ? ? ? ? 48 85 C0 74 31 4C 8B 00 48 8B C8 41 FF 90 ? ? ? ? 48 8B C8 BA ? ? ? ? E8 ? ? ? ? 48 85 C0 74 12 4C 8B 00 48 8B D3 48 8B C8 48 83 C4 20 5B 49 FF 60 60 48 83 C4 20 5B C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 53",
+          "Name": "MarketBoardItemListing",
+          "ActionType": 2
+        },
+        {
+          "Signature": "40 55 53 57 48 8B EC 48 83 EC 70 48 8B 05 ? ? ? ? 48 33 C4 48 89 45 F0 48 8B 0D",
+          "Name": "MarketBoardPurchase",
+          "ActionType": 2
+        },
+        {
+          "Signature": "4C 8B C2 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 4C 8B C2 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 4C 8B C2",
+          "Name": "ItemMarketBoardInfo",
+          "ActionType": 2
+        },
+        {
+          "Signature": "40 53 48 83 EC 20 48 8B 0D ? ? ? ? 48 8B DA E8 ? ? ? ? 48 85 C0 74 36 4C 8B 00 48 8B C8 41 FF 90 ? ? ? ? 48 8B C8 BA ? ? ? ? E8 ? ? ? ? 48 85 C0 74 17 48 8D 53 04",
+          "Name": "MarketBoardItemListingHistory",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 55",
+          "Name": "MarketBoardSearchResult",
+          "ActionType": 2
+        },
+        {
+          "Signature": "4C 8B C2 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 44 8B 09",
+          "Name": "CurrencyCrystalInfo",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 55 56",
+          "Name": "PlaceFieldMarker",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 48 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 55",
+          "Name": "PlaceFieldMarkerPreset",
+          "ActionType": 2
+        },
+        {
+          "Signature": "40 53 48 83 EC 20 48 8D 0D ? ? ? ? 48 8B DA E8 ? ? ? ? 48 8B D3",
+          "Name": "PlayerSetup",
+          "ActionType": 2
+        },
+        {
+          "Signature": "40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 84 C0 74 2B E8 ? ? ? ? 48 8B C8 E8 ? ? ? ? 84 C0 74 1A E8 ? ? ? ? 48 8B D3 48 8B 48 18 48 83 C1 68 48 83 C4 20 5B E9 ? ? ? ? 48 83 C4 20 5B C3 CC CC CC CC CC CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 84 C0 74 16",
+          "Name": "AirshipExplorationResult",
+          "ActionType": 2
+        },
+        {
+          "Signature": "4C 8B C2 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 4C 8B C2 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 44 8B 49 08",
+          "Name": "RetainerInformation",
+          "ActionType": 2
+        },
+        {
+          "Signature": "40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 84 C0 74 16 E8 ? ? ? ? 48 8B D3 48 8D 48 60 48 83 C4 20 5B E9 ? ? ? ? 48 83 C4 20 5B C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 84 C0 74 16",
+          "Name": "CompanySubmersibleStatus",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 30 41 8B D9 41 0F B6 F8 48 8B F2 8B E9 E8 ? ? ? ? 48 8B C8 44 0F B6 CF 0F B6 44 24",
+          "Name": "EventStart",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 30 41 8B D9 41 8B F8 0F B6 F2",
+          "Name": "EventFinish",
+          "ActionType": 2
+        },
+        {
+          "Signature": "4C 8B C2 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 48 8D 0D",
+          "Name": "InventoryActionAck",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 20 49 8B D8 48 8B FA 0F B7 F1 E8 ? ? ? ? 48 8B C8 4C 8B CB 4C 8B C7 0F B7 D6 48 8B 5C 24 ? 48 8B 74 24 ? 48 83 C4 20 5F E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 48 89 5C 24",
+          "Name": "FateInfo",
+          "ActionType": 2
+        },
+        {
+          "Signature": "E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC 48 89 5C 24 ? 57 48 83 EC 20 49 8B F8 48 8B D9 49 83 C0 08",
+          "Name": "Examine",
+          "ActionType": 2
+        },
+        {
+          "Signature": "40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 84 C0 74 16 E8 ? ? ? ? 48 8B D3 48 8D 48 60 48 83 C4 20 5B E9 ? ? ? ? 48 83 C4 20 5B C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 84 C0 74 27",
+          "Name": "CompanyAirshipStatus",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 89 5C 24 ? 57 48 83 EC 50 F6 42 02 02",
+          "Name": "ObjectSpawn",
+          "ActionType": 2
+        },
+        {
+          "Signature": "40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 84 C0 74 2E E8 ? ? ? ? 48 8B C8 E8 ? ? ? ? 84 C0 74 1D E8 ? ? ? ? 48 8B D3 48 8B 48 18 48 81 C1 ? ? ? ? 48 83 C4 20 5B E9 ? ? ? ? 48 83 C4 20 5B C3 CC CC CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 84 C0 74 27",
+          "Name": "SubmarineExplorationResult",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 83 EC 38 4D 8B C8 48 C7 44 24 ? ? ? ? ? 41 B8 ? ? ? ? E8 ? ? ? ? 48 83 C4 38 C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 48 83 EC 38 45 0F B7 D0",
+          "Name": "BossStatusEffectList",
+          "ActionType": 2
+        },
+        {
+          "Signature": "40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 48 85 C0 74 16",
+          "Name": "CFPreferredRole",
+          "ActionType": 2
+        },
+        {
+          "Signature": "40 53 57 48 83 EC 78 48 8B D9 48 8D 0D",
+          "Name": "ContentFinderNotifyPop",
+          "ActionType": 2
+        },
+        {
+          "Signature": "4C 8B C2 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 48 8B DA",
+          "Name": "ActorMove",
+          "ActionType": 2
+        },
+        {
+          "Signature": "40 53 48 83 EC 20 48 8B 0D ? ? ? ? 48 8B DA E8 ? ? ? ? 48 85 C0 74 37",
+          "Name": "ExamineSearchInfo",
+          "ActionType": 2
+        },
+        {
+          "Signature": "44 0F B6 C2 48 8B D1 48 8D 0D",
+          "Name": "PrepareZoning",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 30 41 8B D9 41 8B F8 0F B6 F2",
+          "Name": "EventFinish",
+          "ActionType": 2
+        },
+        {
+          "Signature": "E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC 48 89 5C 24 ? 57 48 83 EC 20 44 0F B6 4A",
+          "Name": "UpdateClassInfo",
+          "ActionType": 2
+        },
+        {
+          "Signature": "4C 8B C2 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 4C 8B C2 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 44 8B 09",
+          "Name": "InventoryTransaction",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 89 5C 24 ? 56 48 83 EC 20 48 8B 0D ? ? ? ? 48 8B F2",
+          "Name": "SocialList",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 89 5C 24 ? 57 48 83 EC 60 48 8B 05 ? ? ? ? 48 33 C4 48 89 44 24 ? 0F B7 5A 08",
+          "Name": "UpdateInventorySlot",
+          "ActionType": 2
+        },
+        {
+          "Signature": "E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC 48 89 5C 24 ? 48 89 6C 24 ? 56 48 83 EC 20 83 3D",
+          "Name": "StatusEffectList",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 48 83 EC 20 83 3D ? ? ? ? ? 41 0F B6 E8 48 8B DA 8B F1 0F 84 ? ? ? ? 48 83 C2 04 E8",
+          "Name": "StatusEffectList2",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 89 5C 24 ? 57 48 83 EC 20 48 8B 1D ? ? ? ? 48 8B FA 48 85 DB 74 28",
+          "Name": "StatusEffectList3",
+          "ActionType": 2
+        },
+        {
+          "Signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC 20 48 8D 99 ? ? ? ? C6 81",
+          "Name": "AirshipStatusList",
+          "ActionType": 2,
+          "ReferenceCount": 2
+        },
+        {
+          "Signature": "40 55 56 41 56 48 83 EC 50 C6 81",
+          "Name": "FreeCompanyInfo",
+          "ActionType": 2,
+          "ReferenceCount": 2
+        },
+        {
+          "Signature": "40 55 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 48 8B 01",
+          "Name": "WardLandInfo",
+          "ActionType": 2,
+          "ReferenceCount": 3
+        },
+        {
+          "Signature": "0F 10 02 0F 11 81 ? ? ? ? 0F 10 4A 10 0F 11 89 ? ? ? ? C3 CC CC CC CC CC CC CC CC CC CC 4C 8D 81",
+          "Name": "SubmarineProgressionStatus",
+          "ActionType": 2,
+          "ReferenceCount": 3
+        },
+        {
+          "Signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 20 0F 10 02 4C 8D 81",
+          "Name": "SubmarineStatusList",
+          "ActionType": 2,
+          "ReferenceCount": 3
+        },
+        {
+          "Signature": "48 89 5C 24 ? 41 56 48 83 EC 20 0F B6 81",
+          "Name": "AirshipStatus",
+          "ActionType": 2,
+          "ReferenceCount": 3
+        },
+        {
+          "Signature": "41 FF 90 ? ? ? ? 48 8B C8 BA ? ? ? ? E8 ? ? ? ? 48 85 C0 74 10 48 8B D3 48 8B C8 48 83 C4 20 5B E9 ? ? ? ? 48 83 C4 20 5B C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 48 89 5C 24 ? 57 48 81 EC",
+          "Name": "FreeCompanyDialog",
+          "ActionType": 1
+        },
+        {
+          "Signature": "48 8D 0D ? ? ? ? E8 ? ? ? ? 4C 8B C3 48 8D 0D ? ? ? ? 8B D7 E8 ? ? ? ? 48 8B 5C 24 ? 48 83 C4 20 5F C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 48 89 5C 24",
+          "Name": "NPCSpawn",
+          "ActionType": 1
+        },
+        {
+          "Signature": "48 8D 0D ? ? ? ? E8 ? ? ? ? 4C 8B C3 48 8D 0D ? ? ? ? 8B D7 E8 ? ? ? ? 48 8B 5C 24 ? 48 83 C4 20 5F C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 53",
+          "Name": "NPCSpawn2",
+          "ActionType": 1
+        },
+        {
+          // or B9 ? ? ? ? 45 33 C0 48 8B D3 48 8B 7C 24 ? 48 8B 5C 24 ? 48 83 C4 50 5E E9 ? ? ? ? B9 ? ? ? ? 45 33 C0 48 8B D3 48 8B 7C 24 ? 48 8B 5C 24 ? 48 83 C4 50 5E E9 ? ? ? ? 48 8B 0D for global 6.21
+          "Signature": "B9 ? ? ? ? E9 ? ? ? ? B9 ? ? ? ? E9 ? ? ? ? 48 8B 0D",
+          "Name": "Logout"
+        }
+      ]
+    }
+  ]
+}

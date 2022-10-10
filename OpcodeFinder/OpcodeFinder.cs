@@ -5,7 +5,7 @@ namespace OpcodeFinder;
 
 internal class OpcodeFinder
 {
-    private const int MagicOffset = 0xC00;
+    private const int RawDataSize = 0xC00;
     private readonly byte[] _arrayData;
     private readonly SigScanner _scanner;
     private readonly List<SignatureInfo> _signatures;
@@ -30,35 +30,7 @@ internal class OpcodeFinder
 
         _signatures = config.Signatures;
     }
-
-    private void GetReference(string pattern, int count)
-    {
-        var result = _scanner.FindPattern(pattern);
-        if (result.Count == 0)
-            return;
-
-        ulong functionStart = 0;
-
-        for (var i = 0; i < count; i++)
-        {
-            var xrefs = _scanner.GetCrossReference((int)(i == 0 ? result[0] : functionStart));
-            var curAddr = xrefs[0];
-            if (i != count - 1)
-                for (var j = 0; j <= 0x50; j++)
-                {
-                    if (_arrayData[curAddr - (ulong)j] != 0xCC)
-                        continue;
-                    curAddr -= (ulong)(j - 1);
-                    functionStart = curAddr;
-                    break;
-                }
-            else
-                functionStart = curAddr;
-
-            Console.WriteLine($"{i}: 0x{functionStart + MagicOffset:X} / 0x{functionStart:X}");
-        }
-    }
-
+    
     public void Find()
     {
         foreach (var signature in _signatures)
@@ -174,11 +146,11 @@ internal class OpcodeFinder
 
             if (instrString.StartsWith("movzx eax,byte ptr [rdx+rax+"))
             {
-                indirectTables.Add(instr.NearBranch64 - MagicOffset);
+                indirectTables.Add(instr.NearBranch64 - RawDataSize);
                 continue;
             }
 
-            if (instrString.StartsWith("mov ecx,[") && instrString.Contains("+rax*4+")) jumpTables.Add(instr.NearBranch64 - MagicOffset);
+            if (instrString.StartsWith("mov ecx,[") && instrString.Contains("+rax*4+")) jumpTables.Add(instr.NearBranch64 - RawDataSize);
         }
 
         if (jumpTables.Count == 0)
@@ -214,7 +186,7 @@ internal class OpcodeFinder
                         var jumpTableIndex = j - minimumCaseValue;
                         var tableByte = _arrayData[(int)indirectTable + jumpTableIndex];
 
-                        var location = BitConverter.ToInt32(_arrayData, (int)jumpTable + tableByte * 4) - MagicOffset;
+                        var location = BitConverter.ToInt32(_arrayData, (int)jumpTable + tableByte * 4) - RawDataSize;
 
                         tableInfos.Add(new TableInfo
                                        {
@@ -236,7 +208,7 @@ internal class OpcodeFinder
                         if (tableByte1 == 0xCC && tableByte2 == 0xCC)
                             break;
 
-                        var location = BitConverter.ToInt32(_arrayData, tableAddress) - MagicOffset;
+                        var location = BitConverter.ToInt32(_arrayData, tableAddress) - RawDataSize;
                         tableInfos.Add(new TableInfo
                                        {
                                            Index = j,
@@ -335,6 +307,7 @@ internal class OpcodeFinder
                         foreach (var i in offsetList)
                         {
                             foreach (var xref in xrefs)
+                            {
                                 for (var offset = 0; offset <= 0x50; offset++)
                                 {
                                     var curAddress = xref - (ulong)offset + (ulong)i;
@@ -345,6 +318,10 @@ internal class OpcodeFinder
                                     xrefResults.Add(info);
                                     break;
                                 }
+
+                                if (xrefResults.Count != 0)
+                                    break;
+                            }
 
                             if (xrefResults.Count != 0)
                                 break;

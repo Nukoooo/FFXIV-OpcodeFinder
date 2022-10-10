@@ -11,7 +11,6 @@ internal class RelativeJump
 
 internal class SigScanner
 {
-    private const int MagicOffset = 0xC00;
     private readonly Dictionary<string, SectionInfo> _sectionInfos = new();
 
     public List<RelativeJump> CallFunctions = new();
