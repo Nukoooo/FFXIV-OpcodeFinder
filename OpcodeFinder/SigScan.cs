@@ -5,8 +5,8 @@ namespace OpcodeFinder;
 
 internal class RelativeJump
 {
-    public ulong Source;
     public ulong Destination;
+    public ulong Source;
 }
 
 internal class SigScanner
@@ -114,7 +114,7 @@ internal class SigScanner
 
         return results;
     }
-    
+
     public List<ulong> GetCrossReference(int offset)
     {
         if (!_sectionInfos.TryGetValue(".text", out var info))
@@ -124,23 +124,19 @@ internal class SigScanner
         {
             var e8 = Find(ArrayData, info.Offset, info.Size, HexToBytes("E8 ? ? ? ?"));
             foreach (var relatives in e8)
-            {
-                CallFunctions.Add(new RelativeJump()
+                CallFunctions.Add(new RelativeJump
                                   {
                                       Source = relatives,
                                       Destination = (ulong)ReadCallSig((int)relatives)
                                   });
-            }
-            
+
             var e9 = Find(ArrayData, info.Offset, info.Size, HexToBytes("E9 ? ? ? ?"));
             foreach (var relatives in e9)
-            {
-                CallFunctions.Add(new RelativeJump()
+                CallFunctions.Add(new RelativeJump
                                   {
                                       Source = relatives,
                                       Destination = (ulong)ReadCallSig((int)relatives)
                                   });
-            }
         }
 
         return CallFunctions.Where(i => i.Destination == (ulong)offset).Select(i => i.Source).ToList();
@@ -154,7 +150,7 @@ internal class SigScanner
 
         for (var i = 0; i < count; i++)
         {
-            var xrefs = GetCrossReference((i == 0 ? offset : (int)functionStart));
+            var xrefs = GetCrossReference(i == 0 ? offset : (int)functionStart);
             var curAddr = xrefs[0];
             if (i != count - 1)
                 for (var j = 0; j <= 0x50; j++)

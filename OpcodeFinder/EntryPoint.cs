@@ -4,7 +4,6 @@ internal class EntryPoint
 {
     private static void Main()
     {
-
         // var sigScanner = new SigScanner(exeBytes);
         var finder = new OpcodeFinder();
         finder.Find();

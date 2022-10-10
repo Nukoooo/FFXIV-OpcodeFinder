@@ -262,7 +262,7 @@ internal class OpcodeFinder
                 case ActionType.None:
                 {
                     var skip = false;
-                    for (var offset = 0; offset <= 0x30; offset++)
+                    for (var offset = 0; offset <= 0x50; offset++)
                     {
                         var filteredResults = results.SelectMany(result => tableInfos.Where(info => info.Location == result - (ulong)offset));
                         if (!filteredResults.Any())
@@ -332,10 +332,11 @@ internal class OpcodeFinder
                         // Finding References
                         var xrefResults = new List<TableInfo>();
                         var xrefs = _scanner.GetCrossReference((int)functionStart);
+                        foreach (var i in offsetList)
                         foreach (var xref in xrefs)
-                            for (var offset = 0; offset <= 0x30; offset++)
+                            for (var offset = 0; offset <= 0x50; offset++)
                             {
-                                var curAddress = xref - (ulong)offset;
+                                var curAddress = xref - (ulong)offset + (ulong)i;
                                 var info = tableInfos.Find(i => i.Location == curAddress);
                                 if (info.Index == 0)
                                     continue;
@@ -343,6 +344,12 @@ internal class OpcodeFinder
                                 xrefResults.Add(info);
                                 break;
                             }
+
+                        if (xrefResults.Count == 0)
+                        {
+                            Console.WriteLine($"[x] Cannot find opcode for {subSignature.Name}. Signature result count: {results.Count} / 0x{results[0]:X}");
+                            continue;
+                        }
 
                         Console.WriteLine($"[+] {subSignature.Name}{name}: {xrefResults.Aggregate("", (current, xrefResult) => current + $"0x{xrefResult.Index:X} ")}");
                     }
@@ -369,7 +376,7 @@ internal class OpcodeFinder
 
                         foreach (var address in offsetList.Select(i => xrefs + (ulong)i))
                         {
-                            for (var offset = 0; offset <= 0x30; offset++)
+                            for (var offset = 0; offset <= 0x50; offset++)
                             {
                                 var curAddress = address - (ulong)offset;
                                 var info = tableInfos.Find(i => i.Location == curAddress);
@@ -401,7 +408,7 @@ internal class OpcodeFinder
                                                  from xref in xrefs
                                                  select xref + (ulong)magicOffset)
                     {
-                        for (var offset = 0; offset <= 0x30; offset++)
+                        for (var offset = 0; offset <= 0x50; offset++)
                         {
                             var curAddress = offsetedXRef - (ulong)offset;
                             var info = tableInfos.Find(i => i.Location == curAddress);
