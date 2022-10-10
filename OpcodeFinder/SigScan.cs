@@ -150,6 +150,8 @@ internal class SigScanner
     {
         ulong functionStart = 0;
 
+        count = Math.Max(count, 1);
+
         for (var i = 0; i < count; i++)
         {
             var xrefs = GetCrossReference((i == 0 ? offset : (int)functionStart));

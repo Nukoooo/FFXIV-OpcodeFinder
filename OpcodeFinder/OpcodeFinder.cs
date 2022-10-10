@@ -153,6 +153,9 @@ internal class OpcodeFinder
         {
             decoder.Decode(out var instr);
 
+            if (instr.OpCode.OpCode == 0XCC)
+                break;
+
             var instrString = instr.ToString();
 
             if (instrString.StartsWith("sub eax,"))

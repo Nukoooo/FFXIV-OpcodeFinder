@@ -2,7 +2,7 @@
 
 namespace OpcodeFinder;
 
-internal enum ReadType : int
+internal enum ReadType
 {
     None,
     Uint8,
@@ -11,14 +11,14 @@ internal enum ReadType : int
     Uint64,
 }
 
-internal enum ActionType : int
+internal enum ActionType
 {
     None,
     ReadThenCrossReference,
     CrossReference,
 }
 
-internal enum JumpTableType : int
+internal enum JumpTableType
 {
     None,
     Direct,

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpcodeFinder", "JsonGEn\OpcodeFinder.csproj", "{F8834E17-AD6F-4D1B-8F11-34BB60F58EAD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpcodeFinder", "OpcodeFinder\OpcodeFinder.csproj", "{F8834E17-AD6F-4D1B-8F11-34BB60F58EAD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
