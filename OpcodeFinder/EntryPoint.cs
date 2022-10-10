@@ -8,7 +8,7 @@ internal class EntryPoint
         // var sigScanner = new SigScanner(exeBytes);
         var finder = new OpcodeFinder();
         finder.Find();
-        
+        Thread.Sleep(-1);
         /*
         var results = sigScanner.FindPattern("00 1B 1B 1B 1B 1B 1B 1B 1B 1B 1B 1B 01 1B");
         if (results.Count == 0)
