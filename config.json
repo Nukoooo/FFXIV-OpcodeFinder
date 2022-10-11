@@ -62,11 +62,6 @@
       "JumpTableType": 2,
       "SubInfo": [
         {
-          "Signature": "40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 48 8B C8 48 8B D3 48 83 C4 20 5B E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 48 8B C8 E8 ? ? ? ? 48 85 C0 74 10",
-          "Name": "EnvironmentControl",
-          "ActionType": 2
-        },
-        {
           "Signature": "48 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 55 56",
           "Name": "PlaceFieldMarker",
           "ActionType": 2
@@ -90,19 +85,6 @@
           "Signature": "48 89 5C 24 ? 57 48 83 EC 60 48 8B 05 ? ? ? ? 48 33 C4 48 89 44 24 ? 48 8B DA",
           "Name": "AoeEffect01",
           "ActionType": 2
-        },
-        {
-          "Signature": "48 8D 93 ?? ?? ?? ?? 48 8D 4C 24 ?? E8 ?? ?? ?? ?? 8B 15 ?? ?? ?? ??",
-          "Name": "AoeEffect",
-          "Offset": 3,
-          "ReadType": 2,
-          "ActionType": 1,
-          "DesiredValues": {
-            "624": "8",
-            "1200": "16",
-            "1776": "24",
-            "2352": "32"
-          }
         },
         {
           "Signature": "40 55 56 48 81 EC ? ? ? ? 48 8B EA",
@@ -132,7 +114,6 @@
     },
     {
       // 48 89 5C 24 ?? 56 48 83 EC 50 8B F2 global 6.21
-
       "Signature": "40 55 56 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 45 37 8B FA",
       "Name": "ProcessZonePacketDown",
       "Offset": 0,
@@ -322,6 +303,11 @@
           "ActionType": 2
         },
         {
+          "Signature": "40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 48 8B C8 48 8B D3 48 83 C4 20 5B E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 48 8B C8 E8 ? ? ? ? 48 85 C0 74 10",
+          "Name": "EnvironmentControl",
+          "ActionType": 2
+        },
+        {
           "Signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC 20 48 8D 99 ? ? ? ? C6 81",
           "Name": "AirshipStatusList",
           "ActionType": 2,
@@ -376,6 +362,19 @@
           // or B9 ? ? ? ? 45 33 C0 48 8B D3 48 8B 7C 24 ? 48 8B 5C 24 ? 48 83 C4 50 5E E9 ? ? ? ? B9 ? ? ? ? 45 33 C0 48 8B D3 48 8B 7C 24 ? 48 8B 5C 24 ? 48 83 C4 50 5E E9 ? ? ? ? 48 8B 0D for global 6.21
           "Signature": "B9 ? ? ? ? E9 ? ? ? ? B9 ? ? ? ? E9 ? ? ? ? 48 8B 0D",
           "Name": "Logout"
+        },
+        {
+          "Signature": "48 8D 93 ?? ?? ?? ?? 48 8D 4C 24 ?? E8 ?? ?? ?? ?? 8B 15 ?? ?? ?? ??",
+          "Name": "AoeEffect",
+          "Offset": 3,
+          "ReadType": 2,
+          "ActionType": 1,
+          "DesiredValues": {
+            "624": "8",
+            "1200": "16",
+            "1776": "24",
+            "2352": "32"
+          }
         }
       ]
     }

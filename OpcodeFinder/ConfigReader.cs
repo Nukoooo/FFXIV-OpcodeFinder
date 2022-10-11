@@ -30,6 +30,7 @@ internal class SignatureInfo
     public ActionType ActionType = ActionType.None;
     public Dictionary<int, string>? DesiredValues = null;
     public int FunctionSize = 0;
+    public bool HasMultipleResult = false;
     public JumpTableType JumpTableType = JumpTableType.None;
     public string Name;
     public int Offset = 0;

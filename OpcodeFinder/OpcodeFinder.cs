@@ -130,7 +130,8 @@ internal class OpcodeFinder
 
         if (tableInfos.Count == 0)
         {
-            foreach (var info in signature.SubInfo) _output.TryAdd(info.Name, "N/A");
+            foreach (var info in signature.SubInfo)
+                _output.TryAdd(info.Name, "N/A");
 
             return;
         }
@@ -349,10 +350,11 @@ internal class OpcodeFinder
                                         continue;
 
                                     xrefResults.Add(info);
-                                    break;
+                                    if (!subSignature.HasMultipleResult)
+                                        break;
                                 }
 
-                                if (xrefResults.Count != 0)
+                                if (!subSignature.HasMultipleResult&& xrefResults.Count != 0)
                                     break;
                             }
 
@@ -411,7 +413,8 @@ internal class OpcodeFinder
                                     continue;
 
                                 xrefResults.Add(info);
-                                break;
+                                if (!subSignature.HasMultipleResult)
+                                    break;
                             }
 
                             if (xrefResults.Count != 0)
