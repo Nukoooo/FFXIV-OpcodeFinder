@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Iced.Intel;
+using Newtonsoft.Json;
 
 namespace OpcodeFinder;
 
@@ -7,15 +8,18 @@ internal class OpcodeFinder
 {
     private const int RawDataSize = 0xC00;
     private readonly byte[] _arrayData;
+
+    private readonly List<int> _offsetList = new()
+                                             {
+                                                 0,
+                                                 0xC00,
+                                                 -0xC00
+                                             };
+
+    private readonly Dictionary<string, string> _output = new();
+
     private readonly SigScanner _scanner;
     private readonly List<SignatureInfo> _signatures;
-
-    private readonly List<int> offsetList = new()
-                                            {
-                                                0,
-                                                0xC00,
-                                                -0xC00
-                                            };
 
     public OpcodeFinder()
     {
@@ -30,22 +34,27 @@ internal class OpcodeFinder
 
         _signatures = config.Signatures;
     }
-    
+
     public void Find()
     {
         foreach (var signature in _signatures)
         {
             if (signature.SubInfo == null)
             {
-                FindOffsetFromBytes(signature);
+                ProcessOffsetMethod(signature);
                 continue;
             }
 
-            FindOffsetFromJumpTable(signature);
+            ProcessJumpTableMethod(signature);
         }
     }
 
-    private void FindOffsetFromBytes(SignatureInfo signature)
+    public void SaveOutput()
+    {
+        File.WriteAllText("./output.json", JsonConvert.SerializeObject(_output, Formatting.Indented));
+    }
+
+    private void ProcessOffsetMethod(SignatureInfo signature)
     {
         var results = _scanner.FindPattern(signature.Signature);
         if (results.Count == 0)
@@ -55,39 +64,45 @@ internal class OpcodeFinder
         }
 
         foreach (var result in results)
+        {
+            ulong offset = 0;
             switch (signature.ReadType)
             {
                 case ReadType.None:
                     break;
                 case ReadType.Uint8:
                 {
-                    Console.WriteLine($"[+] {signature.Name}: 0x{_scanner.ReadByte((int)result + signature.Offset):X}");
+                    offset = _scanner.ReadByte((int)result + signature.Offset);
                     break;
                 }
                 case ReadType.Uint16:
                 {
-                    Console.WriteLine($"[+] {signature.Name}: 0x{_scanner.ReadUInt16((int)result + signature.Offset):X}");
+                    offset = _scanner.ReadUInt16((int)result + signature.Offset);
                     break;
                 }
                 case ReadType.Uint32:
                 {
-                    Console.WriteLine($"[+] {signature.Name}: 0x{_scanner.ReadUInt32((int)result + signature.Offset):X}");
+                    offset = _scanner.ReadUInt32((int)result + signature.Offset);
                     break;
                 }
                 case ReadType.Uint64:
                 {
-                    Console.WriteLine($"[+] {signature.Name}: 0x{_scanner.ReadUInt64((int)result + signature.Offset):X}");
+                    offset = _scanner.ReadUInt64((int)result + signature.Offset);
                     break;
                 }
                 default:
                 {
                     Console.WriteLine($"[x] {signature.Name} has invalid ReadType.");
-                    break;
+                    continue;
                 }
             }
+
+            Console.WriteLine($"[+] {signature.Name}: 0x{offset:X}");
+            _output.TryAdd(signature.Name, $"0x{offset:X}");
+        }
     }
 
-    private void FindOffsetFromJumpTable(SignatureInfo signature)
+    private void ProcessJumpTableMethod(SignatureInfo signature)
     {
         var results = _scanner.FindPattern(signature.Signature);
         switch (results.Count)
@@ -239,7 +254,11 @@ internal class OpcodeFinder
                         var filteredResults = results.SelectMany(result => tableInfos.Where(info => info.Location == result - (ulong)offset));
                         if (!filteredResults.Any())
                             continue;
-                        Console.WriteLine($"[+] {(filteredResults.Count() > 1 ? "Possible opcodes for " : "")}{subSignature.Name}: {filteredResults.Aggregate("", (current, info) => current + $"0x{info.Index:X} ")}");
+                        var opcodeStr = $"{filteredResults.Aggregate("", (current, info) => current + $"0x{info.Index:X} ")}";
+                        opcodeStr = opcodeStr[..^1];
+
+                        Console.WriteLine($"[+] {(filteredResults.Count() > 1 ? "Possible opcodes for " : "")}{subSignature.Name}: {opcodeStr}");
+                        _output.TryAdd(subSignature.Name, opcodeStr);
                         skip = true;
                         break;
                     }
@@ -304,14 +323,14 @@ internal class OpcodeFinder
                         // Finding References
                         var xrefResults = new List<TableInfo>();
                         var xrefs = _scanner.GetCrossReference((int)functionStart);
-                        foreach (var i in offsetList)
+                        foreach (var i in _offsetList)
                         {
                             foreach (var xref in xrefs)
                             {
                                 for (var offset = 0; offset <= 0x50; offset++)
                                 {
                                     var curAddress = xref - (ulong)offset + (ulong)i;
-                                    var info = tableInfos.Find(i => i.Location == curAddress);
+                                    var info = tableInfos.Find(info => info.Location == curAddress);
                                     if (info.Index == 0)
                                         continue;
 
@@ -329,11 +348,17 @@ internal class OpcodeFinder
 
                         if (xrefResults.Count == 0)
                         {
-                            Console.WriteLine($"[x] Cannot find opcode for {subSignature.Name}. Signature result count: {results.Count} / 0x{results[0]:X}");
+                            Console.Write($"[x] Cannot find opcode for {subSignature.Name}{name}. ");
+                            Console.Write($"Signatures: {results.Count}. {results.Aggregate("", (current, address) => current + $"0x{address:X} ")}");
+                            Console.WriteLine($" / xRefs: {xrefs.Count}. {xrefs.Aggregate("", (current, xref) => current + $"0x{xref:X} ")}");
                             continue;
                         }
 
-                        Console.WriteLine($"[+] {subSignature.Name}{name}: {xrefResults.Aggregate("", (current, xrefResult) => current + $"0x{xrefResult.Index:X} ")}");
+                        var opcodeStr = @$"{xrefResults.Aggregate("", (current, xrefResult) => current + $"0x{xrefResult.Index:X} ")}";
+                        opcodeStr = opcodeStr[..^1];
+
+                        _output.TryAdd(subSignature.Name + name, opcodeStr);
+                        Console.WriteLine($"[+] {subSignature.Name}{name}: {opcodeStr}");
                     }
 
                     break;
@@ -341,6 +366,7 @@ internal class OpcodeFinder
                 case ActionType.CrossReference:
                 {
                     var xrefResults = new List<TableInfo>();
+                    string? opcodeStr;
                     if (subSignature.ReferenceCount != null)
                     {
                         if (results.Count > 1)
@@ -356,7 +382,7 @@ internal class OpcodeFinder
                             continue;
                         }
 
-                        foreach (var address in offsetList.Select(i => xrefs + (ulong)i))
+                        foreach (var address in _offsetList.Select(i => xrefs + (ulong)i))
                         {
                             for (var offset = 0; offset <= 0x50; offset++)
                             {
@@ -379,12 +405,17 @@ internal class OpcodeFinder
                             continue;
                         }
 
-                        Console.WriteLine($"[+] {subSignature.Name}: {xrefResults.Aggregate("", (current, xrefResult) => current + $"0x{xrefResult.Index:X} ")}");
+                        opcodeStr = $"{xrefResults.Aggregate("", (current, xrefResult) => current + $"0x{xrefResult.Index:X} ")}";
+                        opcodeStr = opcodeStr[..^1];
+
+                        _output.TryAdd(subSignature.Name,
+                                       opcodeStr);
+                        Console.WriteLine($"[+] {subSignature.Name}: {opcodeStr}");
 
                         continue;
                     }
 
-                    foreach (var offsetedXRef in from magicOffset in offsetList
+                    foreach (var offsetedXRef in from magicOffset in _offsetList
                                                  from result in results
                                                  let xrefs = _scanner.GetCrossReference((int)result)
                                                  from xref in xrefs
@@ -411,7 +442,12 @@ internal class OpcodeFinder
                         continue;
                     }
 
-                    Console.WriteLine($"[+] {subSignature.Name}: {xrefResults.Aggregate("", (current, xrefResult) => current + $"0x{xrefResult.Index:X} ")}");
+                    opcodeStr = $"{xrefResults.Aggregate("", (current, xrefResult) => current + $"0x{xrefResult.Index:X} ")}";
+                    opcodeStr = opcodeStr[..^1];
+                    _output.TryAdd(subSignature.Name,
+                                   opcodeStr
+                                  );
+                    Console.WriteLine($"[+] {subSignature.Name}: {opcodeStr}");
 
                     break;
                 }

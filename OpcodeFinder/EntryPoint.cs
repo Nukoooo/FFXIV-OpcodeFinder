@@ -6,7 +6,7 @@ internal class EntryPoint
     {
         var finder = new OpcodeFinder();
         finder.Find();
-
+        finder.SaveOutput();
         Console.Read();
     }
 }
