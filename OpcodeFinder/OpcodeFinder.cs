@@ -93,6 +93,7 @@ internal class OpcodeFinder
                 default:
                 {
                     Console.WriteLine($"[x] {signature.Name} has invalid ReadType.");
+                    _output.TryAdd(signature.Name, "N/A");
                     continue;
                 }
             }
@@ -126,6 +127,13 @@ internal class OpcodeFinder
         var tableInfos = new List<TableInfo>();
 
         ProcessJumpTable(signature, codeReader, decoder, ref tableInfos);
+
+        if (tableInfos.Count == 0)
+        {
+            foreach (var info in signature.SubInfo) _output.TryAdd(info.Name, "N/A");
+
+            return;
+        }
 
         FindOpcodeFromJumpTable(signature, tableInfos);
     }
@@ -264,7 +272,11 @@ internal class OpcodeFinder
                     }
 
                     if (!skip)
+                    {
+                        _output.TryAdd(subSignature.Name, "N/A");
+
                         Console.WriteLine($"[x] Cannot find opcode for {subSignature.Name}");
+                    }
 
                     continue;
                 }
@@ -301,7 +313,9 @@ internal class OpcodeFinder
                             default:
                             {
                                 Console.WriteLine($"[x] {subSignature.Name} has invalid ReadType.");
-                                break;
+                                _output.TryAdd(subSignature.Name, "N/A");
+
+                                continue;
                             }
                         }
 
@@ -351,6 +365,8 @@ internal class OpcodeFinder
                             Console.Write($"[x] Cannot find opcode for {subSignature.Name}{name}. ");
                             Console.Write($"Signatures: {results.Count}. {results.Aggregate("", (current, address) => current + $"0x{address:X} ")}");
                             Console.WriteLine($" / xRefs: {xrefs.Count}. {xrefs.Aggregate("", (current, xref) => current + $"0x{xref:X} ")}");
+                            _output.TryAdd(subSignature.Name + name, "N/A");
+
                             continue;
                         }
 
@@ -372,6 +388,7 @@ internal class OpcodeFinder
                         if (results.Count > 1)
                         {
                             Console.WriteLine($"[x] The signature for {subSignature.Name} has multiple results while ReferenceCount is not empty");
+                            _output.TryAdd(subSignature.Name, "N/A");
                             continue;
                         }
 
@@ -379,6 +396,8 @@ internal class OpcodeFinder
                         if (xrefs == 0)
                         {
                             Console.WriteLine($"[x] No references was found for {subSignature.Name}");
+                            _output.TryAdd(subSignature.Name, "N/A");
+
                             continue;
                         }
 
@@ -402,6 +421,8 @@ internal class OpcodeFinder
                         if (xrefResults.Count == 0)
                         {
                             Console.WriteLine($"[x] Cannot find opcode for {subSignature.Name}. Signature result count: {results.Count} / 0x{results[0]:X}");
+                            _output.TryAdd(subSignature.Name, "N/A");
+
                             continue;
                         }
 
@@ -439,6 +460,8 @@ internal class OpcodeFinder
                     if (xrefResults.Count == 0)
                     {
                         Console.WriteLine($"[x] Cannot find opcode for {subSignature.Name}. Signature result count: {results.Count} / 0x{results[0]:X}");
+                        _output.TryAdd(subSignature.Name, "N/A");
+
                         continue;
                     }
 
