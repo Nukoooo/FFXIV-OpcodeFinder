@@ -128,11 +128,6 @@
           "ActionType": 2
         },
         {
-          "Signature": "4C 8B 01 4D 85 C0 74 12 0F B6 02",
-          "Name": "ActorGauge",
-          "ActionType": 2
-        },
-        {
           "Signature": "4C 8B C2 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 4C 8B C2 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 53",
           "Name": "ActorSetPos",
           "ActionType": 2
@@ -282,6 +277,11 @@
         {
           "Signature": "4C 8B C2 8B D1 48 8D 0D ? ? ? ? E9 ? ? ? ? CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 48 8B DA",
           "Name": "ActorMove",
+          "ActionType": 2
+        },
+        {
+          "Signature": "4C 8B 01 4D 85 C0 74 12 0F B6 02",
+          "Name": "ActorGauge",
           "ActionType": 2
         },
         {
