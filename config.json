@@ -62,6 +62,36 @@
       "ReadType": 2 
     },
     {
+      "Signature": "C7 44 24 ? ? ? ? ? 48 C7 44 24 ? ? ? ? ? 89 5C 24 60",
+      "Name": "EventStart_Client",
+      "Offset": 4,
+      "ReadType": 2 
+    },
+    {
+      "Signature": "48 8D 05 ? ? ? ? 49 0F 45 C2 80 F9 02",
+      "Name": "EventAction_Client",
+      "Offset": 32,
+      "ReadType": 2 
+    },
+    {
+      "Signature": "E9 ? ? ? ? 80 F9 02 77 ? 88 4C 24 57 48 8B 08 48 89 4C 24 58 C7 44 24 30 ? ? ? ? 48 C7 44 24 38 20 00 00 00 89 54 24 50 66 44 89 44 24 54 44 88 4C 24 56",
+      "Name": "EventFinish_Client",
+      "Offset": 26,
+      "ReadType": 2 
+    },
+    {
+      "Signature": "C7 44 24 ? ? ? ? ? 48 C7 44 24 ? ? ? ? ? 89 6C 24 40 89 74 24 44 89 7C 24 48 89 5C 24 4C",
+      "Name": "Unknown_Client",
+      "Offset": 4,
+      "ReadType": 2 
+    },
+    {
+      "Signature": "C7 45 ? ? ? ? ? 0F 57 F6 48 C7 45",
+      "Name": "Ping_Client",
+      "Offset": 3,
+      "ReadType": 2 
+    },
+    {
       "Signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 50 48 8B FA 48 8B F1 0F B7 12",
       "Name": "ProcessActorControl",
       "FunctionSize": 4704,
