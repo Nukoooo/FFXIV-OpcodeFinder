@@ -11,9 +11,9 @@ This program aims to help finding network opcodes for Final Fantasy XIV.
             "Offset": 0, // Integer, can be negative
             "FunctionSize": 0, // The size of function, it can be set to INT_MAX, since the program will stop scanning once it detects 0xCC opcode
             "ReadType": 0, // 0-None, 1-Uint8 2-Uint16 3-Uint32 4-Uint64
-            "ActionType": 0, // 0-None, 1-ReadThenCrossReference (Read offset first, then check DesiredValue (can be empty), then find the reference), 2-CrossReference
+            "ActionType": 0, // 0-None, 1-ReadThenCrossReference (Read offset first, then check DesiredValue (can be empty), then find the reference), 2-CrossReference, 3-Relative (FindCallFunction)
             "ReferenceCount": null, // Can be null, pretty much how many times should the program find the reference calls
-            "JumpTableType": 0, // 0-None, 1-DirectJumpTable, 2-IndirectJumpTable
+            "JumpTableType": 0, // 0-None, 1-DirectJumpTable, 2-IndirectJumpTable, 3-SimpleSwitchCase
             "DesiredValues": { // Can be null
                 "key, Integer": 0,
                 // ...

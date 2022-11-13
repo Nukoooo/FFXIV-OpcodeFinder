@@ -56,6 +56,12 @@
       "ReadType": 2
     },
     {
+      "Signature": "81 79 ? ? ? ? ? 74 0E 48 8B 49 68",
+      "Name": "ContainerInfo",
+      "Offset": 3,
+      "ReadType": 2 
+    },
+    {
       "Signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 50 48 8B FA 48 8B F1 0F B7 12",
       "Name": "ProcessActorControl",
       "FunctionSize": 4704,
@@ -105,10 +111,6 @@
           "Signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 48 83 EC 20 83 3D ? ? ? ? ? 41 0F B6 E8 48 8B DA 8B F1 0F 84 ? ? ? ? 48 89 7C 24",
           "Name": "UpdateHpMpTp",
           "ActionType": 2
-        },
-        {
-          "Signature": "4C 8B 4B 10 49 8B C1",
-          "Name": "EventPlay"
         }
       ]
     },
@@ -375,6 +377,23 @@
             "1776": "24",
             "2352": "32"
           }
+        }
+      ]
+    },
+    {
+      "Signature": "E8 ? ? ? ? 0F B6 46 28",
+      "Name": "EventPlayMessageProcessor",
+      "FunctionSize": 234,
+      "ActionType": 3,
+      "JumpTableType": 3,
+      "SubInfo": [
+        {
+          "Signature": "48 C7 44 24 20 30 00 00 00 E8 ? ? ? ? 48 83 C4 38 C3",
+          "Name": "EventPlay"
+        },
+        {
+          "Signature": "48 C7 44 24 20 28 00 00 00 E8 ? ? ? ? 48 83 C4 38 C3",
+          "Name": "EventPlay4"
         }
       ]
     }

@@ -31,7 +31,7 @@ internal class OpcodeFinder
         _arrayData = File.ReadAllBytes(config.GamePath);
 
         _scanner = new SigScanner(_arrayData);
-
+        
         _signatures = config.Signatures;
     }
 
@@ -105,6 +105,12 @@ internal class OpcodeFinder
 
     private void ProcessJumpTableMethod(SignatureInfo signature)
     {
+        if (signature.JumpTableType == JumpTableType.None)
+        {
+            Console.WriteLine($"[x] JumpTableType of {signature.Name} is 0. But it has SubInfo??");
+            return;
+        }
+
         var results = _scanner.FindPattern(signature.Signature);
         switch (results.Count)
         {
@@ -117,8 +123,11 @@ internal class OpcodeFinder
         }
 
         Console.WriteLine($"\n[-] Finding OpCodes from {signature.Name}");
-
+        
         var address = results[0];
+        
+        if (signature.ActionType == ActionType.Relative)
+            address = (ulong)_scanner.ReadCallSig((int)address);
 
         var bytes = _scanner.ReadBytes((int)address, signature.FunctionSize);
         var codeReader = new ByteArrayCodeReader(bytes);
@@ -126,8 +135,18 @@ internal class OpcodeFinder
         decoder.IP = address;
         var tableInfos = new List<TableInfo>();
 
-        ProcessJumpTable(signature, codeReader, decoder, ref tableInfos);
-
+        if (signature.JumpTableType == JumpTableType.SimpleSwitchCase)
+        {
+            foreach (var i in _offsetList.TakeWhile(i => tableInfos.Count == 0))
+            {
+                ProcessSimpleSwitchCase(address + (ulong)i, codeReader, decoder, ref tableInfos);
+            }
+        }
+        else
+        {
+            ProcessJumpTable(signature, codeReader, decoder, ref tableInfos);
+        }
+        
         if (tableInfos.Count == 0)
         {
             foreach (var info in signature.SubInfo)
@@ -135,8 +154,108 @@ internal class OpcodeFinder
 
             return;
         }
-
+        
         FindOpcodeFromJumpTable(signature, tableInfos);
+    }
+
+    private static void ProcessSimpleSwitchCase(ulong baseAddress, ByteArrayCodeReader codeReader, Decoder decoder, ref List<TableInfo> info)
+    {
+        ulong originalCase = 0;
+        ulong currentCase = 0;
+        
+        // Console.WriteLine($"BaseAddress: 0x{baseAddress:X}");
+
+        Instruction? lastInsturction = null;
+
+        while (codeReader.CanReadByte)
+        {
+            decoder.Decode(out var instr);
+
+            if (instr.OpCode.OpCode == 0XCC)
+                break;
+
+            // var instrString = instr.ToString();
+
+            // Console.WriteLine($"0x{instr.Immediate32:X} / {instr.OpCode.Code} / {instrString} / 0x{instr.NearBranch32:X}");
+
+            if (lastInsturction == null)
+            {
+                lastInsturction = instr;
+                continue;
+            }
+
+            switch (lastInsturction.Value.OpCode.Code)
+            {
+                // .text: 00000001406BF668 41 81 FA EC 01 00 00                                            cmp r10d, 1ECh
+                case Code.Cmp_rm32_imm32 or Code.Cmp_rm32_imm8:
+                    switch (instr.OpCode.Code)
+                    {
+                        // .text:00000001406BF66F 0F 87 80 00 00 00                                            ja      loc_1406BF6F5
+                        case Code.Ja_rel32_64:
+                            originalCase = lastInsturction.Value.Immediate32;
+                            // Console.WriteLine($"NewLocation(start+offset): 0x{instr.NearBranch16:X}");
+                            break;
+                        // last case in this switch case
+                        // .text:00000001406BF69F 41 83 FA 32                                                     cmp r10d, 32h; '2'
+                        // .text:00000001406BF6A3 0F 85 AB 00 00 00                                               jnz loc_1406BF754
+                        // .text:00000001406BF6A9 48 C7 44 24 20 60 00 00 00                                      mov[rsp + 38h + var_18], 60h
+                        case Code.Jne_rel32_64 or Code.Jne_rel8_64:
+                            currentCase += lastInsturction.Value.Immediate32;
+                            info.Add(new TableInfo
+                                     {
+                                         Index = (int)currentCase,
+                                         Location = instr.NearBranch32
+                                     });
+                    
+                            // Console.WriteLine($" aaa | Code.Jne_rel32_64: {instr.Length} / CurrentCase: 0x{currentCase:X} / Location: 0x{baseAddress + instr.NearBranch32:X} / BaseAddress:{baseAddress:X} / 0x{instr.NearBranch32:X}");
+                            break;
+                    }
+
+                    break;
+                // If the last insturction is Je or Return(the beginning of new location)
+                case Code.Je_rel8_64 or Code.Retnq:
+                {
+                    if (instr.OpCode.Code is Code.Sub_rm32_imm32 or Code.Sub_rm32_imm8)
+                    {
+                        if (lastInsturction.Value.OpCode.Code is Code.Retnq)
+                        {
+                            originalCase = currentCase = instr.Immediate32;
+                            // Console.WriteLine($"NewLocation(start+offset) Retnq: 0x{instr.Immediate32:X}");
+                        }
+                        else
+                        {
+                            currentCase += instr.Immediate32;
+                            info.Add(new TableInfo
+                                     {
+                                         Index = (int)currentCase,
+                                         Location = lastInsturction.Value.NearBranch32
+                                     });
+                        
+                            // Console.WriteLine($" bbb | CaseValueOffset: 0x{instr.Immediate32:X} / CurrentCase: 0x{currentCase:X} / Location: 0x{baseAddress + lastInsturction.Value.NearBranch32:X} / 0x{lastInsturction.Value.NearBranch32:X} / BaseAddress:{baseAddress:X}");
+                        }
+                    }
+
+                    break;
+                }
+                // cases that aint covered from above
+                default:
+                {
+                    if (lastInsturction.Value.Code is Code.Jne_rel32_64 or Code.Jne_rel8_64 && instr.OpCode.Code is Code.Mov_rm64_imm32)
+                    {
+                        info.Add(new TableInfo
+                                 {
+                                     Index = (int)originalCase,
+                                     Location = instr.IP
+                                 });
+                        // Console.WriteLine($" ccc | CurrentCase: 0x{originalCase:X} / Location: 0x{baseAddress + instr.IP:X} / BaseAddress:{baseAddress:X} / 0x{instr.IP:X}");
+                    }
+
+                    break;
+                }
+            }
+            
+            lastInsturction = instr;
+        }
     }
 
     private void ProcessJumpTable(SignatureInfo signature, ByteArrayCodeReader codeReader, Decoder decoder, ref List<TableInfo> tableInfos)
@@ -246,7 +365,7 @@ internal class OpcodeFinder
             }
         }
     }
-
+    
     private void FindOpcodeFromJumpTable(SignatureInfo signature, List<TableInfo> tableInfos)
     {
         foreach (var subSignature in signature.SubInfo)
@@ -482,7 +601,7 @@ internal class OpcodeFinder
             }
         }
     }
-
+    
     private struct TableInfo
     {
         public int Index;

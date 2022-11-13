@@ -15,14 +15,16 @@ internal enum ActionType
 {
     None,
     ReadThenCrossReference,
-    CrossReference
+    CrossReference,
+    Relative,
 }
 
 internal enum JumpTableType
 {
     None,
     Direct,
-    Indirect
+    Indirect,
+    SimpleSwitchCase,
 }
 
 internal class SignatureInfo

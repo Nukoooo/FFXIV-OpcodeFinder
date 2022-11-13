@@ -167,7 +167,7 @@ internal class SigScanner
         return functionStart;
     }
 
-    private int ReadCallSig(int offset)
+    public int ReadCallSig(int offset)
     {
         var jumpOffset = BitConverter.ToInt32(ArrayData, offset + 1);
         return offset + jumpOffset + 5;
