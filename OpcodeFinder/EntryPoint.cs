@@ -8,7 +8,7 @@ internal class EntryPoint
 // #if RELEASE
         finder.Find();
         finder.SaveOutput();
-        Console.Read();
+        Console.ReadKey();
 // #endif
     }
 }

@@ -31,7 +31,7 @@ internal class OpcodeFinder
         _arrayData = File.ReadAllBytes(config.GamePath);
 
         _scanner = new SigScanner(_arrayData);
-        
+
         _signatures = config.Signatures;
     }
 
@@ -123,11 +123,61 @@ internal class OpcodeFinder
         }
 
         Console.WriteLine($"\n[-] Finding OpCodes from {signature.Name}");
-        
+
         var address = results[0];
         
-        if (signature.ActionType == ActionType.Relative)
-            address = (ulong)_scanner.ReadCallSig((int)address);
+        // PreProcess address
+        {
+            if (signature.ActionType == ActionType.Relative)
+            {
+                address = (ulong)_scanner.ReadCallSig((int)address);
+            }
+            else if (signature.FindCall)
+            {
+                var foundCall = false;
+
+                if (signature.ActionType == ActionType.CrossReference)
+                {
+                    var references = _scanner.GetCrossReference((int)address);
+                    foreach (var reference in references)
+                    {
+                        // Console.WriteLine($"0x{reference:X}");
+                        if (foundCall)
+                            break;
+                        for (var offset = 1; offset <= 0x10; offset++)
+                        {
+                            var opcode = _scanner.ReadByte((int)(reference - (ulong)offset));
+                            // Console.WriteLine($"0x{reference - (ulong)offset:X} / 0x{opcode:X}");
+                            if (opcode != 0xE8)
+                                continue;
+                            foundCall = true;
+                            address = (ulong)_scanner.ReadCallSig((int)reference - offset);
+                            // Console.WriteLine($"Found. 0x{_scanner.ReadCallSig((int)reference - offset):X}");
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    for (var offset = 1; offset <= 0x10; offset++)
+                    {
+                        var opcode = _scanner.ReadByte((int)(address - (ulong)offset));
+                        if (opcode != 0xE8)
+                            continue;
+                        foundCall = true;
+                        address = (ulong)_scanner.ReadCallSig((int)address - offset);
+                        break;
+                    }
+                }
+
+
+                if (!foundCall)
+                {
+                    Console.WriteLine($"[x] Failed to find call function for {signature.Name}.");
+                    return;
+                }
+            }
+        }
 
         var bytes = _scanner.ReadBytes((int)address, signature.FunctionSize);
         var codeReader = new ByteArrayCodeReader(bytes);
@@ -136,17 +186,10 @@ internal class OpcodeFinder
         var tableInfos = new List<TableInfo>();
 
         if (signature.JumpTableType == JumpTableType.SimpleSwitchCase)
-        {
-            foreach (var i in _offsetList.TakeWhile(i => tableInfos.Count == 0))
-            {
-                ProcessSimpleSwitchCase(address + (ulong)i, codeReader, decoder, ref tableInfos);
-            }
-        }
+            ProcessSimpleSwitchCase(codeReader, decoder, ref tableInfos);
         else
-        {
             ProcessJumpTable(signature, codeReader, decoder, ref tableInfos);
-        }
-        
+
         if (tableInfos.Count == 0)
         {
             foreach (var info in signature.SubInfo)
@@ -158,11 +201,11 @@ internal class OpcodeFinder
         FindOpcodeFromJumpTable(signature, tableInfos);
     }
 
-    private static void ProcessSimpleSwitchCase(ulong baseAddress, ByteArrayCodeReader codeReader, Decoder decoder, ref List<TableInfo> info)
+    private static void ProcessSimpleSwitchCase(ByteArrayCodeReader codeReader, Decoder decoder, ref List<TableInfo> info)
     {
         ulong originalCase = 0;
         ulong currentCase = 0;
-        
+
         // Console.WriteLine($"BaseAddress: 0x{baseAddress:X}");
 
         Instruction? lastInsturction = null;
@@ -174,9 +217,10 @@ internal class OpcodeFinder
             if (instr.OpCode.OpCode == 0XCC)
                 break;
 
-            // var instrString = instr.ToString();
+            /*
+            var instrString = instr.ToString();
 
-            // Console.WriteLine($"0x{instr.Immediate32:X} / {instr.OpCode.Code} / {instrString} / 0x{instr.NearBranch32:X}");
+            Console.WriteLine($"0x{instr.Immediate32:X} / {instr.OpCode.Code} / {instrString} / 0x{instr.NearBranch32:X}");*/
 
             if (lastInsturction == null)
             {
@@ -206,8 +250,8 @@ internal class OpcodeFinder
                                          Index = (int)currentCase,
                                          Location = instr.NearBranch32
                                      });
-                    
-                            // Console.WriteLine($" aaa | Code.Jne_rel32_64: {instr.Length} / CurrentCase: 0x{currentCase:X} / Location: 0x{baseAddress + instr.NearBranch32:X} / BaseAddress:{baseAddress:X} / 0x{instr.NearBranch32:X}");
+
+                            // Console.WriteLine($" aaa | Code.Jne_rel32_64: {instr.Length} / CurrentCase: 0x{currentCase:X} / 0x{instr.NearBranch32:X}");
                             break;
                     }
 
@@ -230,9 +274,20 @@ internal class OpcodeFinder
                                          Index = (int)currentCase,
                                          Location = lastInsturction.Value.NearBranch32
                                      });
-                        
-                            // Console.WriteLine($" bbb | CaseValueOffset: 0x{instr.Immediate32:X} / CurrentCase: 0x{currentCase:X} / Location: 0x{baseAddress + lastInsturction.Value.NearBranch32:X} / 0x{lastInsturction.Value.NearBranch32:X} / BaseAddress:{baseAddress:X}");
+
+                            // Console.WriteLine($" bbb | instr.Length: {instr.Length} / CurrentCase: 0x{currentCase:X} / 0x{instr.NearBranch32:X} / 0x{instr.Immediate32:X}");
                         }
+                    }
+                    else if (instr.OpCode.Code == Code.Cmp_rm32_imm8)
+                    {
+                        currentCase += instr.Immediate32;
+                        info.Add(new TableInfo
+                                 {
+                                     Index = (int)currentCase,
+                                     Location = lastInsturction.Value.NearBranch32
+                                 });
+
+                        // Console.WriteLine($" ddd | Code.Jne_rel32_64: {instr.Length} / CurrentCase: 0x{currentCase:X} / 0x{instr.NearBranch32:X}");
                     }
 
                     break;
@@ -240,20 +295,27 @@ internal class OpcodeFinder
                 // cases that aint covered from above
                 default:
                 {
-                    if (lastInsturction.Value.Code is Code.Jne_rel32_64 or Code.Jne_rel8_64 && instr.OpCode.Code is Code.Mov_rm64_imm32)
+                    if (lastInsturction.Value.Code is Code.Jne_rel32_64 or Code.Jne_rel8_64 or Code.Movzx_r32_rm16 && instr.OpCode.Code is Code.Mov_rm64_imm32 or Code.Sub_rm32_imm32)
                     {
+                        if (instr.OpCode.Code is Code.Sub_rm32_imm32)
+                        {
+                            // currentCase += instr.Immediate32;
+                            originalCase = instr.Immediate32;
+                            continue;
+                        }
+
                         info.Add(new TableInfo
                                  {
                                      Index = (int)originalCase,
                                      Location = instr.IP
                                  });
-                        // Console.WriteLine($" ccc | CurrentCase: 0x{originalCase:X} / Location: 0x{baseAddress + instr.IP:X} / BaseAddress:{baseAddress:X} / 0x{instr.IP:X}");
+                        // Console.WriteLine($" ccc | Code.Jne_rel32_64: {instr.Length} / CurrentCase: 0x{originalCase:X} / 0x{instr.NearBranch32:X}");
                     }
 
                     break;
                 }
             }
-            
+
             lastInsturction = instr;
         }
     }
@@ -365,7 +427,7 @@ internal class OpcodeFinder
             }
         }
     }
-    
+
     private void FindOpcodeFromJumpTable(SignatureInfo signature, List<TableInfo> tableInfos)
     {
         foreach (var subSignature in signature.SubInfo)
@@ -377,6 +439,22 @@ internal class OpcodeFinder
                 case ActionType.None:
                 {
                     var skip = false;
+                    /*foreach (var i in _offsetList)
+                    {
+                        foreach (var result in results)
+                        {
+                            for (var offset = 0; offset <= 0x50; offset++)
+                            {
+                                var targetAddress = result + (ulong)i;
+                                var filtered = tableInfos.Find(table => table.Location == targetAddress - (ulong)offset);
+                                if (filtered.Index == 0)
+                                    continue;
+
+                                Console.WriteLine($"{subSignature.Name} 0x{filtered.Index:X} | 0x{targetAddress:X}");
+                            }
+                        }
+                    }*/
+
                     for (var offset = 0; offset <= 0x50; offset++)
                     {
                         var filteredResults = results.SelectMany(result => tableInfos.Where(info => info.Location == result - (ulong)offset));
@@ -384,7 +462,7 @@ internal class OpcodeFinder
                             continue;
                         var opcodeStr = $"{filteredResults.Aggregate("", (current, info) => current + $"0x{info.Index:X} ")}";
                         opcodeStr = opcodeStr[..^1];
-
+                        
                         Console.WriteLine($"[+] {(filteredResults.Count() > 1 ? "Possible opcodes for " : "")}{subSignature.Name}: {opcodeStr}");
                         _output.TryAdd(subSignature.Name, opcodeStr);
                         skip = true;
@@ -473,7 +551,7 @@ internal class OpcodeFinder
                                         break;
                                 }
 
-                                if (!subSignature.HasMultipleResult&& xrefResults.Count != 0)
+                                if (!subSignature.HasMultipleResult && xrefResults.Count != 0)
                                     break;
                             }
 
@@ -581,7 +659,7 @@ internal class OpcodeFinder
 
                     if (xrefResults.Count == 0)
                     {
-                        Console.WriteLine($"[x] Cannot find opcode for {subSignature.Name}. Signature result count: {results.Count} / 0x{results[0]:X}");
+                        Console.WriteLine($"[x] Cannot find opcode for {subSignature.Name}. Signature result count: {results.Count} / 0x{results[0]:X} /  0x{results[1]:X}");
                         _output.TryAdd(subSignature.Name, "N/A");
 
                         continue;
@@ -601,7 +679,7 @@ internal class OpcodeFinder
             }
         }
     }
-    
+
     private struct TableInfo
     {
         public int Index;

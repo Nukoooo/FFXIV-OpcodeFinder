@@ -40,6 +40,7 @@ internal class SignatureInfo
     public int? ReferenceCount = null;
     public string Signature;
     public List<SignatureInfo>? SubInfo = null;
+    public bool FindCall = false;
 }
 
 internal class Config

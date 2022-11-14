@@ -108,11 +108,6 @@
           "ActionType": 2
         },
         {
-          "Signature": "48 8B C4 44 88 40 18 89 48 08",
-          "Name": "EffectResult",
-          "ActionType": 2
-        },
-        {
           "Signature": "0F B7 13 B8 ? ? ? ?",
           "Name": "ActorControlSelf",
           "ActionType": 0
@@ -424,6 +419,20 @@
         {
           "Signature": "48 C7 44 24 20 28 00 00 00 E8 ? ? ? ? 48 83 C4 38 C3",
           "Name": "EventPlay4"
+        }
+      ]
+    },
+    {
+      "Signature": "48 8B C4 44 88 40 18 89 48 08",
+      "Name": "EffectResultProcessor",
+      "ActionType": 2,
+      "FunctionSize": 234,
+      "JumpTableType": 3,
+      "FindCall": true,
+      "SubInfo":[
+        {
+          "Signature": "48 C7 44 24 20 60 00 00 00 E8 ? ? ? ? 48 83 C4 38 C3",
+          "Name": "EffectResultBasic"
         }
       ]
     }
