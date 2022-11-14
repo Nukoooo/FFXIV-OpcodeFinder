@@ -259,7 +259,7 @@ internal class OpcodeFinder
                 // If the last insturction is Je or Return(the beginning of new location)
                 case Code.Je_rel8_64 or Code.Retnq:
                 {
-                    if (instr.OpCode.Code is Code.Sub_rm32_imm32 or Code.Sub_rm32_imm8)
+                    if (instr.OpCode.Code is Code.Sub_rm32_imm32 or Code.Sub_rm32_imm8 or Code.Cmp_rm32_imm8)
                     {
                         if (lastInsturction.Value.OpCode.Code is Code.Retnq)
                         {
@@ -277,17 +277,6 @@ internal class OpcodeFinder
 
                             // Console.WriteLine($" bbb | instr.Length: {instr.Length} / CurrentCase: 0x{currentCase:X} / 0x{instr.NearBranch32:X} / 0x{instr.Immediate32:X}");
                         }
-                    }
-                    else if (instr.OpCode.Code == Code.Cmp_rm32_imm8)
-                    {
-                        currentCase += instr.Immediate32;
-                        info.Add(new TableInfo
-                                 {
-                                     Index = (int)currentCase,
-                                     Location = lastInsturction.Value.NearBranch32
-                                 });
-
-                        // Console.WriteLine($" ddd | Code.Jne_rel32_64: {instr.Length} / CurrentCase: 0x{currentCase:X} / 0x{instr.NearBranch32:X}");
                     }
 
                     break;

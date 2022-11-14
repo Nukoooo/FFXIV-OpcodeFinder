@@ -62,6 +62,12 @@
       "ReadType": 2 
     },
     {
+      "Signature": "8B 46 08 3D",
+      "Name": "ItemInfo",
+      "Offset": "4",
+      "ReadType": 2
+    },
+    {
       "Signature": "C7 44 24 ? ? ? ? ? 48 C7 44 24 ? ? ? ? ? 89 5C 24 60",
       "Name": "EventStart_Client",
       "Offset": 4,
