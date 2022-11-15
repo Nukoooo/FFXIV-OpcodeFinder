@@ -378,9 +378,9 @@
           "ActionType": 2
         },
         {
-          "Signature": "0F B7 13 B8 ? ? ? ?",
+          "Signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 30 48 8B D9 49 8B F8 41 0F B7 08",
           "Name": "ActorControlSelf",
-          "ActionType": 0
+          "ActionType": 2
         },
         {
           "Signature": "48 89 5C 24 ? 57 48 83 EC 60 48 8B 05 ? ? ? ? 48 33 C4 48 89 44 24 ? 48 8B DA",

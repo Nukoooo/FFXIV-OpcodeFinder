@@ -66,7 +66,7 @@
   "AoeEffect24": "0x104",
   "AoeEffect32": "0x2FD",
   "PlayerSpawn": "0x220",
-  "ActorControlSelf": "N/A",
+  "ActorControlSelf": "0x125",
   "AoeEffect01": "0x2AD",
   "ActorCast": "0x166",
   "ActorSetPos": "0x185",
