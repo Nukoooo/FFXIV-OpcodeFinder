@@ -51,6 +51,7 @@
   "StatusEffectList2": "0xD8",
   "StatusEffectList3": "0x154",
   "EnvironmentControl": "0x1BB",
+  "PlayStats": "0x31E",
   "AirshipStatusList": "0x331",
   "FreeCompanyInfo": "0x193",
   "WardLandInfo": "0xC6",
@@ -61,6 +62,7 @@
   "NPCSpawn": "0x349",
   "NPCSpawn2": "0x192",
   "Logout": "0x23E",
+  "Playtime": "0x1C2",
   "AoeEffect8": "0x1C6",
   "AoeEffect16": "0x195",
   "AoeEffect24": "0x104",
@@ -71,6 +73,10 @@
   "ActorCast": "0x166",
   "ActorSetPos": "0x185",
   "UpdateHpMpTp": "0x6F",
+  "InitZone": "0x26F",
+  "UpdateSearchInfo": "0x379",
   "EventPlay": "0x101",
-  "EventPlay4": "0x24C"
+  "EventPlay4": "0x24C",
+  "SystemLogMessage": "N/A",
+  "DesynthResult": "0x233"
 }

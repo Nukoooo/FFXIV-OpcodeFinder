@@ -410,6 +410,15 @@
           "Signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 48 83 EC 20 83 3D ? ? ? ? ? 41 0F B6 E8 48 8B DA 8B F1 0F 84 ? ? ? ? 48 89 7C 24",
           "Name": "UpdateHpMpTp",
           "ActionType": 2
+        },
+        {
+          "Signature": "4C 8D 46 10 8B D7 48 8D 0D ? ? ? ? E8 ? ? ? ? 45 33 C0 48 8D 56 10 8B CF E8 ? ? ? ? 48 8D 4E 60",
+          "Name": "InitZone"
+        },
+        {
+          "Signature": "48 89 5C 24 ? 57 48 83 EC 20 48 8B 0D ? ? ? ? 48 8B FA E8 ? ? ? ? 48 8B D8 48 85 C0 0F 84",
+          "Name": "UpdateSearchInfo",
+          "ActionType": 2
         }
       ]
     },
@@ -427,6 +436,19 @@
         {
           "Signature": "48 C7 44 24 20 28 00 00 00 E8 ? ? ? ? 48 83 C4 38 C3",
           "Name": "EventPlay4"
+        }
+      ]
+    },
+    {
+      "Signature": "E8 ? ? ? ? 44 0F B6 46 ? 4C 8D 4E 16",
+      "Name": "ProcessSystemLogMessage",
+      "FunctionSize": 143,
+      "ActionType": 3,
+      "JumpTableType": 3,
+      "SubInfo": [
+        {
+          "Signature": "48 C7 44 24 20 18 00 00 00 E8 ? ? ? ? 48 83 C4 38 C3",
+          "Name": "SystemLogMessage"
         }
       ]
     },
