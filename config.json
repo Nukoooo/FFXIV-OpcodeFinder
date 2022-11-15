@@ -451,19 +451,6 @@
           "Name": "SystemLogMessage"
         }
       ]
-    },
-    {
-      "Signature": "E8 ? ? ? ? 80 7E 30 00 4C 8D 46 34",
-      "Name": "ProcessDesynthResult",
-      "FunctionSize": 87,
-      "ActionType": 3,
-      "JumpTableType": 3,
-      "SubInfo": [
-        {
-          "Signature": "48 C7 44 24 20 48 00 00 00 E8 ? ? ? ? 48 83 C4 38 C3",
-          "Name": "DesynthResult"
-        }
-      ]
     }
   ]
 }

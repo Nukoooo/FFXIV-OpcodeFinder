@@ -77,6 +77,5 @@
   "UpdateSearchInfo": "0x379",
   "EventPlay": "0x101",
   "EventPlay4": "0x24C",
-  "SystemLogMessage": "N/A",
-  "DesynthResult": "0x233"
+  "SystemLogMessage": "N/A"
 }
