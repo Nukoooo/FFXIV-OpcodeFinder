@@ -170,7 +170,6 @@ internal class OpcodeFinder
                     }
                 }
 
-
                 if (!foundCall)
                 {
                     Console.WriteLine($"[x] Failed to find call function for {signature.Name}.");
