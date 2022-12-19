@@ -41,6 +41,8 @@ internal class SignatureInfo
     public string Signature;
     public List<SignatureInfo>? SubInfo = null;
     public bool FindCall = false;
+    public bool ByteMatch = false;
+    public int ByteLength;
 }
 
 internal class Config

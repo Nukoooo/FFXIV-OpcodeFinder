@@ -431,16 +431,20 @@
       "SubInfo": [
         {
           "Signature": "48 C7 44 24 20 30 00 00 00 E8 ? ? ? ? 48 83 C4 38 C3",
-          "Name": "EventPlay"
+          "Name": "EventPlay",
+          "ByteMatch": true,
+          "ByteLength": 10
         },
         {
           "Signature": "48 C7 44 24 20 28 00 00 00 E8 ? ? ? ? 48 83 C4 38 C3",
-          "Name": "EventPlay4"
+          "Name": "EventPlay4",
+          "ByteMatch": true,
+          "ByteLength": 10
         }
       ]
     },
     {
-      "Signature": "E8 ? ? ? ? 44 0F B6 46 ? 4C 8D 4E 16",
+      "Signature": "E8 ? ? ? ? 44 0F B6 4E ? 4C 8D 46 1C",
       "Name": "ProcessSystemLogMessage",
       "FunctionSize": 143,
       "ActionType": 3,
@@ -448,7 +452,9 @@
       "SubInfo": [
         {
           "Signature": "48 C7 44 24 20 18 00 00 00 E8 ? ? ? ? 48 83 C4 38 C3",
-          "Name": "SystemLogMessage"
+          "Name": "SystemLogMessage",
+          "ByteMatch": true,
+          "ByteLength": 10
         }
       ]
     }

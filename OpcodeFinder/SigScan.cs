@@ -188,7 +188,7 @@ internal class SigScanner
         return results;
     }
 
-    private static bool ByteMatch(IReadOnlyList<byte> bytes, int start, IReadOnlyList<int> pattern)
+    public static bool ByteMatch(IReadOnlyList<byte> bytes, int start, IReadOnlyList<int> pattern)
     {
         for (int i = start, j = 0; j < pattern.Count; i++, j++)
         {
@@ -202,7 +202,7 @@ internal class SigScanner
         return true;
     }
 
-    private static List<int> HexToBytes(string hex)
+    public static List<int> HexToBytes(string hex)
     {
         var bytes = new List<int>();
 
